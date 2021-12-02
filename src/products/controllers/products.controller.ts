@@ -10,11 +10,11 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
-import { ProductService } from '../services/products.service';
+import { ProductsService } from '../services/products.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductService) {}
+  constructor(private productsService: ProductsService) {}
   @Get()
   getProducts(): Product[] {
     return this.productsService.findAll();

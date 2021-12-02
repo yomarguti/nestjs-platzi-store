@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ParseIntPipe } from '../common/parse-int.pipe.ts.pipe';
+import { ParseIntPipe } from '../../common/parse-int.pipe.ts.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';
 import { UsersService } from '../services/users.service';
