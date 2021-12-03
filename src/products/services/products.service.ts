@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
+  constructor(private configService: ConfigService) {}
   private counterId = 1;
   private products: Product[] = [
     {
@@ -27,6 +29,7 @@ export class ProductsService {
   }
 
   findAll(): Product[] {
+    console.log(this.configService.get('DATABASE_NAME'));
     return this.products;
   }
 
