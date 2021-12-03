@@ -11,7 +11,9 @@ import {
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
 import { Customer } from '../entities/customer.entity';
 import { CustomersService } from '../services/customers.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}

@@ -11,7 +11,9 @@ import {
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
 import { Brand } from '../entities/brand.entity';
 import { BrandsService } from '../services/brands.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Brands')
 @Controller('brands')
 export class BrandsController {
   constructor(private brandsService: BrandsService) {}
