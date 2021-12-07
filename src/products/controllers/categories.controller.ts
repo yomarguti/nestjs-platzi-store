@@ -18,27 +18,32 @@ import { ApiTags } from '@nestjs/swagger';
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
   @Get()
-  getCategories(): Category[] {
+  getCategories(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }
 
   @Get('/:id')
-  getCategoryById(@Param('id', ParseIntPipe) id: number): Category {
+  getCategoryById(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.findById(id);
   }
 
   @Post()
-  createCategory(@Body() createCategoryDto: CreateCategoryDto): Category {
+  createCategory(
+    @Body() createCategoryDto: CreateCategoryDto,
+  ): Promise<Category> {
     return this.categoriesService.createCategory(createCategoryDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, payload);
+  update(
+    @Param('id') id: string,
+    @Body() payload: UpdateCategoryDto,
+  ): Promise<Category> {
+    return this.categoriesService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  delete(@Param('id') id: string): Promise<Boolean> {
+    return this.categoriesService.remove(id);
   }
 }

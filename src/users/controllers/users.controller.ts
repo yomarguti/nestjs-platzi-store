@@ -21,32 +21,35 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'List all the users' })
-  getUsers(): User[] {
+  getUsers(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get('/:id')
-  getUserById(@Param('id', ParseIntPipe) id: number): User {
+  getUserById(@Param('id') id: string): Promise<User> {
     return this.usersService.findById(id);
   }
 
   @Get('/:id/orders')
-  getOrders(@Param('id', ParseIntPipe) id: number): Order {
+  async getOrders(@Param('id') id: string): Promise<Order> {
     return this.usersService.getOrderByUser(id);
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto): User {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateUserDto) {
-    return this.usersService.update(+id, payload);
+  update(
+    @Param('id') id: string,
+    @Body() payload: UpdateUserDto,
+  ): Promise<User> {
+    return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  delete(@Param('id') id: string): Promise<Boolean> {
+    return this.usersService.remove(id);
   }
 }

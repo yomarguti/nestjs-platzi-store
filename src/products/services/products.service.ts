@@ -3,61 +3,51 @@ import { ConfigService, ConfigType } from '@nestjs/config';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import config from '../../typed.config';
+import { ProductsRepository } from '../repositories/products.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
+    @InjectRepository(ProductsRepository)
+    private productsRepository: ProductsRepository,
   ) {}
-  private counterId = 1;
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Producto 1',
-      description: 'lorem lorem',
-      price: 10000,
-      stock: 300,
-      image: 'https://i.imgur.com/U4iGx1j.jpeg',
-    },
-  ];
 
-  createProduct(createProductDto: CreateProductDto) {
-    this.counterId++;
-    const product = {
-      id: this.counterId,
-      ...createProductDto,
-    };
-    this.products.push(product);
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    const product = this.productsRepository.create({ ...createProductDto });
+    await this.productsRepository.save(product);
     return product;
   }
 
-  findAll(): Product[] {
+  testTypedConfigService() {
     console.log(this.configService.database);
-    return this.products;
   }
 
-  findById(id: number): Product {
-    const product = this.products.find((product) => product.id === id);
+  async findAll(): Promise<Product[]> {
+    return this.productsRepository.find();
+  }
+
+  async findById(id: string): Promise<Product> {
+    const product = await this.productsRepository.findOne(id);
     if (!product) throw new NotFoundException();
     return product;
   }
 
-  update(id: number, changes: UpdateProductDto) {
-    const product = this.findById(id);
-    const index = this.products.findIndex((item) => item.id === id);
-    this.products[index] = {
-      ...product,
-      ...changes,
-    };
-    return this.products[index];
+  async update(id: string, changes: UpdateProductDto): Promise<Product> {
+    const product = await this.findById(id);
+    Object.keys(changes).forEach((key) => {
+      product[key] = changes[key];
+    });
+    await this.productsRepository.save(product);
+    return product;
   }
 
-  remove(id: number) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index === -1) {
+  async remove(id: string): Promise<Boolean> {
+    const { affected } = await this.productsRepository.delete(id);
+    if (!affected) {
       throw new NotFoundException(`Product #${id} not found`);
     }
-    this.products.splice(index, 1);
     return true;
   }
 }

@@ -18,27 +18,30 @@ import { ApiTags } from '@nestjs/swagger';
 export class BrandsController {
   constructor(private brandsService: BrandsService) {}
   @Get()
-  getBrands(): Brand[] {
+  getBrands(): Promise<Brand[]> {
     return this.brandsService.findAll();
   }
 
   @Get('/:id')
-  getBrandById(@Param('id', ParseIntPipe) id: number): Brand {
+  getBrandById(@Param('id') id: string): Promise<Brand> {
     return this.brandsService.findById(id);
   }
 
   @Post()
-  createBrand(@Body() createBrandDto: CreateBrandDto): Brand {
+  createBrand(@Body() createBrandDto: CreateBrandDto): Promise<Brand> {
     return this.brandsService.createBrand(createBrandDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateBrandDto) {
-    return this.brandsService.update(+id, payload);
+  update(
+    @Param('id') id: string,
+    @Body() payload: UpdateBrandDto,
+  ): Promise<Brand> {
+    return this.brandsService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.brandsService.remove(+id);
+  delete(@Param('id') id: string): Promise<Boolean> {
+    return this.brandsService.remove(id);
   }
 }
