@@ -24,7 +24,7 @@ import config from './typed.config';
         return {
           type: 'postgres',
           autoLoadEntities: true,
-          synchronize: true,
+          synchronize: false,
           host: configService.get('DATABASE_HOST'),
           port: configService.get('DATABASE_PORT'),
           username: configService.get('DATABASE_USERNAME'),
