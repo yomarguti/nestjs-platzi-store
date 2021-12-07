@@ -4,23 +4,31 @@ import { ProductsService } from '../../products/services/products.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { Order } from '../entities/order.entity';
 import { User } from '../entities/user.entity';
+import { CustomersRepository } from '../repositories/customers.repository';
 import { UsersRepository } from '../repositories/users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+    @InjectRepository(CustomersRepository)
+    private customersRepository: CustomersRepository,
     private productsService: ProductsService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create({ ...createUserDto });
-    await this.usersRepository.save(user);
-    return user;
+    if (createUserDto.customerId) {
+      const customer = await this.customersRepository.findOne(
+        createUserDto.customerId,
+      );
+      user.customer = customer;
+    }
+    return await this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    return await this.usersRepository.find({ relations: ['customer'] });
   }
 
   async findById(id: string): Promise<User> {
