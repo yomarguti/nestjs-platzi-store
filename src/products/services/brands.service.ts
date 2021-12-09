@@ -22,7 +22,9 @@ export class BrandsService {
   }
 
   async findById(id: string): Promise<Brand> {
-    const brand = await this.brandsRepository.findOne(id);
+    const brand = await this.brandsRepository.findOne(id, {
+      relations: ['products'],
+    });
     if (!brand) throw new NotFoundException();
     return brand;
   }

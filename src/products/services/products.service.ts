@@ -5,6 +5,7 @@ import { Product } from '../entities/product.entity';
 import config from '../../typed.config';
 import { ProductsRepository } from '../repositories/products.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BrandsService } from './brands.service';
 
 @Injectable()
 export class ProductsService {
@@ -12,10 +13,15 @@ export class ProductsService {
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
     @InjectRepository(ProductsRepository)
     private productsRepository: ProductsRepository,
+    private brandsService: BrandsService,
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     const product = this.productsRepository.create({ ...createProductDto });
+    if (createProductDto.brandId) {
+      const brand = await this.brandsService.findById(createProductDto.brandId);
+      product.brand = brand;
+    }
     await this.productsRepository.save(product);
     return product;
   }
