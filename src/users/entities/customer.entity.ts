@@ -2,16 +2,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Order } from './order.entity';
 import { User } from './user.entity';
 
 @Entity()
 export class Customer {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;
@@ -30,4 +32,7 @@ export class Customer {
 
   @OneToOne(() => User, (user) => user.customer, { nullable: true })
   user: User;
+
+  @OneToMany((type) => Order, (order) => order.customer)
+  orders: Order[];
 }

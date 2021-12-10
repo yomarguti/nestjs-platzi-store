@@ -35,6 +35,14 @@ export class ProductsController {
     return this.productsService.createProduct(createProductDto);
   }
 
+  @Put(':id/category/:categoryId')
+  async addCategory(
+    @Param('id') id: string,
+    @Param('categoryId') categoryId: string,
+  ): Promise<Product> {
+    return this.productsService.addCategoryToProduct(id, categoryId);
+  }
+
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -46,5 +54,13 @@ export class ProductsController {
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<Boolean> {
     return this.productsService.remove(id);
+  }
+
+  @Delete(':id/category/:categoryId')
+  async deleteCategory(
+    @Param('id') id: string,
+    @Param('categoryId') categoryId: string,
+  ): Promise<Product> {
+    return this.productsService.removeCategoryFromProduct(id, categoryId);
   }
 }

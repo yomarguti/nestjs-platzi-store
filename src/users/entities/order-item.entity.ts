@@ -1,16 +1,17 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from '../../products/entities/product.entity';
 import { Customer } from './customer.entity';
-import { OrderItem } from './order-item.entity';
+import { Order } from './order.entity';
 
 @Entity()
-export class Order {
+export class OrderItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,9 +21,12 @@ export class Order {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToOne((type) => Customer, (customer) => customer.orders)
-  customer: Customer;
+  @Column({ type: 'int' })
+  quantity: number;
 
-  @OneToMany((type) => OrderItem, (item) => item.order)
-  items: OrderItem[];
+  @ManyToOne((type) => Product)
+  product: Product;
+
+  @ManyToOne((type) => Order, (order) => order.items)
+  order: Order;
 }

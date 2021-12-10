@@ -7,13 +7,31 @@ import { CustomersRepository } from './repositories/customers.repository';
 import { UsersRepository } from './repositories/users.repository';
 import { CustomersService } from './services/customers.service';
 import { UsersService } from './services/users.service';
+import { OrdersService } from './services/orders.service';
+import { OrdersController } from './controllers/orders.controller';
+import { OrdersRepository } from './repositories/orders.repository';
+import { OrderItemController } from './controllers/order-item.controller';
+import { OrderItemService } from './services/order-item.service';
+import { OrderItemRepository } from './repositories/order-item.repository';
+import { ProductsRepository } from '../products/repositories/products.repository';
+import { Product } from '../products/entities/product.entity';
 
 @Module({
-  controllers: [UsersController, CustomersController],
-  providers: [UsersService, CustomersService],
+  controllers: [
+    UsersController,
+    CustomersController,
+    OrdersController,
+    OrderItemController,
+  ],
+  providers: [UsersService, CustomersService, OrdersService, OrderItemService],
   imports: [
-    TypeOrmModule.forFeature([CustomersRepository, UsersRepository]),
-    ProductsModule,
+    TypeOrmModule.forFeature([
+      CustomersRepository,
+      UsersRepository,
+      OrdersRepository,
+      OrderItemRepository,
+      Product,
+    ]),
   ],
 })
 export class UsersModule {}

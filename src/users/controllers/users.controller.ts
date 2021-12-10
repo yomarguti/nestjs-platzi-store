@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ParseIntPipe } from '../../common/parse-int.pipe.ts.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { Order } from '../entities/order.entity';
 import { User } from '../entities/user.entity';
 import { UsersService } from '../services/users.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -30,10 +29,10 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
-  @Get('/:id/orders')
+  /*   @Get('/:id/orders')
   async getOrders(@Param('id') id: string): Promise<Order> {
     return this.usersService.getOrderByUser(id);
-  }
+  } */
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {

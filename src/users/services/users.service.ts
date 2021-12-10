@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductsService } from '../../products/services/products.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { Order } from '../entities/order.entity';
 import { User } from '../entities/user.entity';
 import { CustomersRepository } from '../repositories/customers.repository';
 import { UsersRepository } from '../repositories/users.repository';
@@ -13,7 +11,6 @@ export class UsersService {
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
     @InjectRepository(CustomersRepository)
     private customersRepository: CustomersRepository,
-    private productsService: ProductsService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -50,12 +47,11 @@ export class UsersService {
     return true;
   }
 
-  async getOrderByUser(id: string): Promise<Order> {
+  /*   async getOrderByUser(id: string): Promise<Order> {
     const user = await this.findById(id);
     return {
-      date: new Date(),
       user,
       products: await this.productsService.findAll(),
     };
-  }
+  } */
 }
