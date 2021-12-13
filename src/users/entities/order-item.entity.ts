@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -7,7 +8,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
-import { Customer } from './customer.entity';
 import { Order } from './order.entity';
 
 @Entity({ name: 'order_items' })
@@ -15,6 +15,7 @@ export class OrderItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Exclude()
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
@@ -22,6 +23,7 @@ export class OrderItem {
   })
   createdAt: Date;
 
+  @Exclude()
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',
