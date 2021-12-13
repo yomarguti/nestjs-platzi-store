@@ -1,6 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService, ConfigType } from '@nestjs/config';
-import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
+import {
+  CreateProductDto,
+  FilterProductsDto,
+  UpdateProductDto,
+} from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import config from '../../typed.config';
 import { ProductsRepository } from '../repositories/products.repository';
@@ -43,8 +47,16 @@ export class ProductsService {
     console.log(this.configService.database);
   }
 
-  async findAll(): Promise<Product[]> {
-    return this.productsRepository.find();
+  async findAll(filterProductsDto?: FilterProductsDto): Promise<Product[]> {
+    if (filterProductsDto) {
+      const { limit, offset } = filterProductsDto;
+      return this.productsRepository.find({
+        relations: ['brand'],
+        take: limit,
+        skip: offset,
+      });
+    }
+    return this.productsRepository.find({ relations: ['brand'] });
   }
 
   async findById(id: string): Promise<Product> {

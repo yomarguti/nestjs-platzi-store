@@ -7,11 +7,16 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
+import {
+  CreateProductDto,
+  FilterProductsDto,
+  UpdateProductDto,
+} from '../dtos/product.dto';
 import { Product } from '../entities/product.entity';
 import { ProductsService } from '../services/products.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Products')
 @Controller('products')
@@ -19,8 +24,11 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  async getProducts(): Promise<Product[]> {
-    return this.productsService.findAll();
+  @ApiOperation({ summary: 'List of products' })
+  async getProducts(
+    @Query() filterProductsDto: FilterProductsDto,
+  ): Promise<Product[]> {
+    return this.productsService.findAll(filterProductsDto);
   }
 
   @Get('/:id')
