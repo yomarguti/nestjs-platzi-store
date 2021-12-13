@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { environments } from './environments';
 import { configValidationSchema } from './config.schema';
+import { AuthModule } from './auth/auth.module';
 import config from './typed.config';
 
 @Module({
@@ -35,6 +36,7 @@ import config from './typed.config';
     }),
     UsersModule,
     ProductsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
