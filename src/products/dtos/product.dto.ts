@@ -9,6 +9,7 @@ import {
   IsUrl,
   IsUUID,
   Min,
+  Validate,
 } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
@@ -62,6 +63,14 @@ export class FilterProductsDto {
   @Min(0)
   @IsInt()
   offset: number;
+
+  @IsOptional()
+  @Min(0)
+  minPrice: number;
+
+  @IsPositive()
+  @Validate((item) => item.minPrice)
+  maxPrice: number;
 }
 /* export class RemoveCategoryFromProductDto {
   @ApiProperty({ description: 'Product Id' })

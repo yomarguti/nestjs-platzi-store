@@ -11,6 +11,7 @@ import { ProductsRepository } from '../repositories/products.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriesRepository } from '../repositories/categories.repository';
 import { BrandsRepository } from '../repositories/brands.repository';
+import { Between, FindConditions } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
@@ -49,11 +50,18 @@ export class ProductsService {
 
   async findAll(filterProductsDto?: FilterProductsDto): Promise<Product[]> {
     if (filterProductsDto) {
-      const { limit, offset } = filterProductsDto;
+      const filter: FindConditions<Product> = {};
+      const { limit, offset, maxPrice, minPrice } = filterProductsDto;
+
+      if (minPrice && maxPrice) {
+        filter.price = Between(minPrice, maxPrice);
+      }
+
       return this.productsRepository.find({
         relations: ['brand'],
         take: limit,
         skip: offset,
+        where: filter,
       });
     }
     return this.productsRepository.find({ relations: ['brand'] });
