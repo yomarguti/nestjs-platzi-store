@@ -5,6 +5,8 @@ import { User } from '../entities/user.entity';
 import { CustomersRepository } from '../repositories/customers.repository';
 import { UsersRepository } from '../repositories/users.repository';
 
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -15,6 +17,11 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create({ ...createUserDto });
+
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+
+    user.password = hashedPassword;
+
     if (createUserDto.customerId) {
       const customer = await this.customersRepository.findOne(
         createUserDto.customerId,
@@ -22,6 +29,10 @@ export class UsersService {
       user.customer = customer;
     }
     return await this.usersRepository.save(user);
+  }
+
+  async findByEmail(email: string) {
+    return this.usersRepository.findOne({ where: { email } });
   }
 
   async findAll(): Promise<User[]> {

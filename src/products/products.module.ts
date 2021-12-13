@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BrandsController } from './controllers/brands.controller';
@@ -18,7 +17,6 @@ import { ProductsService } from './services/products.service';
       BrandsRepository,
       CategoriesRepository,
     ]),
-    HttpModule,
   ],
   controllers: [ProductsController, CategoriesController, BrandsController],
   providers: [ProductsService, CategoriesService, BrandsService],

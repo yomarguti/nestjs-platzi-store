@@ -33,5 +33,7 @@ import { Product } from '../products/entities/product.entity';
       Product,
     ]),
   ],
+
+  exports: [UsersService],
 })
 export class UsersModule {}
