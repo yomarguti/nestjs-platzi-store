@@ -22,15 +22,24 @@ import config from './typed.config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
+        const host = configService.get('TYPEORM_HOST');
+        if (host !== 'localhost') {
+          return {
+            type: 'postgres',
+            autoLoadEntities: true,
+            synchronize: false,
+            url: configService.get('DATABASE_URL'),
+            ssl: {
+              rejectUnauthorized: host !== 'localhost',
+            },
+          };
+        }
+
         return {
           type: 'postgres',
           autoLoadEntities: true,
           synchronize: false,
-          host: configService.get('DATABASE_HOST'),
-          port: configService.get('DATABASE_PORT'),
-          username: configService.get('DATABASE_USERNAME'),
-          password: configService.get('DATABASE_PASSWORD'),
-          database: configService.get('DATABASE_NAME'),
+          url: configService.get('DATABASE_URL'),
         };
       },
     }),
