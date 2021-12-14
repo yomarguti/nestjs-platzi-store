@@ -9,6 +9,12 @@ import { ProductsRepository } from './repositories/products.repository';
 import { BrandsService } from './services/brands.service';
 import { CategoriesService } from './services/categories.service';
 import { ProductsService } from './services/products.service';
+import { ProfileController } from './controllers/profile.controller';
+import { ProfileService } from './services/profile.service';
+import { OrdersRepository } from '../users/repositories/orders.repository';
+import { CustomersRepository } from '../users/repositories/customers.repository';
+import { UsersService } from '../users/services/users.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -16,10 +22,23 @@ import { ProductsService } from './services/products.service';
       ProductsRepository,
       BrandsRepository,
       CategoriesRepository,
+      OrdersRepository,
+      CustomersRepository,
     ]),
+    UsersModule,
   ],
-  controllers: [ProductsController, CategoriesController, BrandsController],
-  providers: [ProductsService, CategoriesService, BrandsService],
+  controllers: [
+    ProductsController,
+    CategoriesController,
+    BrandsController,
+    ProfileController,
+  ],
+  providers: [
+    ProductsService,
+    CategoriesService,
+    BrandsService,
+    ProfileService,
+  ],
   exports: [ProductsService],
 })
 export class ProductsModule {}

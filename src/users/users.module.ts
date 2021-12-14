@@ -13,7 +13,6 @@ import { OrdersRepository } from './repositories/orders.repository';
 import { OrderItemController } from './controllers/order-item.controller';
 import { OrderItemService } from './services/order-item.service';
 import { OrderItemRepository } from './repositories/order-item.repository';
-import { ProductsRepository } from '../products/repositories/products.repository';
 import { Product } from '../products/entities/product.entity';
 
 @Module({
